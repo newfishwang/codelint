@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bupt.sice.mapper.ITaskMapper">
+    <resultMap id="TaskMap" type="cn.edu.bupt.sice.vo.TaskVO">
+        <result column="task_id" property="taskId"/>
+        <result column="task_name" property="taskName"/>
+        <result column="check_status" property="checkStatus"/>
+        <result column="result_path" property="resultPath"/>
+        <result column="zip_path" property="zipPath"/>
+        <result column="launch_time" property="launchTime"/>
+        <result column="check_tool" property="checkTool"/>
+    </resultMap>
+    <resultMap id="TaskDetailMap" type="cn.edu.bupt.sice.po.TaskDetailPO">
+        <result column="task_id" property="taskId"/>
+        <result column="task_name" property="taskName"/>
+        <result column="check_tool" property="checkTool"/>
+        <result column="high_num" property="high"/>
+        <result column="mid_num" property="mid"/>
+        <result column="low_num" property="low"/>
+        <result column="rule_name" property="ruleName"/>
+        <result column="num" property="num"/>
+    </resultMap>
+    <insert id="insertIntoTask" parameterType="cn.edu.bupt.sice.vo.TaskVO" useGeneratedKeys="true" keyProperty="taskId">
+        insert into chk_task(task_name,check_status,result_path,zip_path,launch_time,check_tool)
+        values(#{taskName},#{checkStatus},#{resultPath},#{zipPath},#{launchTime},#{checkTool})
+    </insert>
+    <update id="updateTask" parameterType="cn.edu.bupt.sice.vo.TaskVO">
+        update chk_task
+        set
+        check_status=#{checkStatus},result_path=#{resultPath}
+        where task_id = #{taskId}
+    </update>
+    <select id="getTaskDetail" parameterType="long" resultMap="TaskDetailMap">
+        select task.task_id,task.task_name,task.check_tool,sta.high_num,sta.mid_num,sta.low_num,rule_name,num from chk_task task
+        join statistics sta on sta.statistics_task_id=task.task_id
+        join statistics_ex ex on ex.statistics_id=sta.statistics_id
+        where sta.task_type=1 and task_id=#{_parameter}
+        order by task.task_id
+    </select>
+    <select id="getAllTaskNum" resultType="int">
+        select count(*) from chk_task
+    </select>
+    <select id="getTask" parameterType="long" resultMap="TaskMap">
+        select * from chk_task where task_id=#{_parameter};
+    </select>
+</mapper>

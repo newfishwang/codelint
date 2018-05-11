@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bupt.sice.mapper.IStatisticsMapper">
+    <resultMap id="statisticsMap" type="cn.edu.bupt.sice.vo.StatisticsVO">
+        <result column="statistics_id" property="statisticsId"/>
+        <result column="statistics_task_id" property="statisticsTaskId"/>
+        <result column="class_num" property="classNum"/>
+        <result column="line_num" property="lineNum"/>
+        <result column="package_num" property="packageNum"/>
+        <result column="high_num" property="highNum"/>
+        <result column="high_density" property="highDensity"/>
+        <result column="mid_num" property="midNum"/>
+        <result column="mid_density" property="midDensity"/>
+        <result column="low_num" property="lowNum"/>
+        <result column="low_density" property="lowDensity"/>
+        <result column="total_num" property="totalNum"/>
+        <result column="total_density" property="totalDensity"/>
+        <result column="task_type" property="taskType"/>
+        <result column="tool" property="tool"/>
+    </resultMap>
+    <insert id="insertStatistics" parameterType="cn.edu.bupt.sice.vo.StatisticsVO" useGeneratedKeys="true" keyProperty="statisticsId">
+        insert into statistics
+        (statistics_task_id,class_num,line_num,package_num,high_num,high_density,mid_num,mid_density,low_num,low_density,total_num,total_density,task_type,tool)
+        values(#{statisticsTaskId},#{classNum},#{lineNum},#{packageNum},#{highNum},#{highDensity},#{midNum},#{midDensity},#{lowNum},#{lowDensity},#{totalNum},#{totalDensity},#{taskType},#{tool})
+    </insert>
+    <select id="queryStatistics" resultMap="statisticsMap">
+        select * from statistics
+        where statistics_task_id=#{taskId} and task_type=#{taskType}
+    </select>
+</mapper>

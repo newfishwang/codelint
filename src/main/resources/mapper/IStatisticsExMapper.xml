@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bupt.sice.mapper.IStatisticsExMapper">
+    <resultMap id="statisticsMap" type="cn.edu.bupt.sice.vo.StatisticsExVO">
+        <result column="statistics_ex_id" property="statisticsExId"/>
+        <result column="statistics_id" property="statisticsId"/>
+        <result column="rule_name" property="ruleName"/>
+        <result column="num" property="num"/>
+    </resultMap>
+    <insert id="insertIntoEx" parameterType="list" useGeneratedKeys="true" keyProperty="statisticsExId">
+        insert into statistics_ex(statistics_id,rule_name,num)
+        values
+        <foreach collection="list" item="ex" separator=",">
+            (#{ex.statisticsId},#{ex.ruleName},#{ex.num})
+        </foreach>
+    </insert>
+    <select id="queryEx" parameterType="long">
+        select * from statistics_ex where statistics_id = #{_parameter};
+    </select>
+</mapper>

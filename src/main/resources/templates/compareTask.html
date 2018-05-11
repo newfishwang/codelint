@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:float="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<script>
+    function bbb() {
+        $.ajax({
+            type:"get",
+            url:"/tasks/uploadCompare",
+            success:function () {
+
+            },
+            error:function () {
+
+            }
+        })
+    }
+</script>
+<p></p>
+<br/>
+<ul class="nav nav-tabs">
+    <li><a href="#">首页</a></li>
+    <li class="active"><a href="#">任务管理</a></li>
+    <li><a href="#">报告管理</a></li>
+</ul>
+<br/><br/><br/>
+<div align="center">
+    <button class="btn btn-default" type="submit" style="margin-left: 1200px" onclick="bbb()">发起检测</button>
+</div>
+
+<table class="table">
+    <caption>任务列表</caption>
+    <thead>
+    <tr>
+        <th width="200">任务名</th>
+        <th width="200">发起时间</th>
+        <th width="200">检测状态</th>
+        <th width="800">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="task,taskStat : ${tasks}">
+        <td th:text="${task.taskName}"></td>
+        <td th:text="${task.taskId}"></td>
+        <td th:text="${task.checkStatus}"></td>
+        <td><div class="btn-group">
+            <button type="button" class="btn btn-default">查看结果</button>
+            <button type="button" class="btn btn-default">导出报告</button>
+            <button type="button" class="btn btn-default">删除</button>
+        </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+</body>
+</html>

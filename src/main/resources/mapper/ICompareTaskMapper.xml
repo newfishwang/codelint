@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bupt.sice.mapper.ICompareTaskMapper">
+    <resultMap id="compareTaskMap" type="cn.edu.bupt.sice.vo.CompareTaskVO">
+        <result column="task_id" property="taskId"/>
+        <result column="task_name" property="taskName"/>
+        <result column="check_status" property="checkStatus"/>
+        <result column="result_path_findbugs" property="resultPathFindBugs"/>
+        <result column="result_path_pmd" property="resultPathPMD"/>
+        <result column="zip_path" property="zipPath"/>
+        <result column="launch_time" property="launchTime"/>
+    </resultMap>
+    <resultMap id="compareDetailMap" type="cn.edu.bupt.sice.po.CompareDetailPO">
+        <result column="task_id" property="taskId"/>
+        <result column="task_name" property="taskName"/>
+        <result column="high" property="high_num"/>
+        <result column="mid" property="mid_num"/>
+        <result column="low" property="low_num"/>
+        <result column="total" property="total_num"/>
+        <result column="rule_name" property="ruleName"/>
+        <result column="num" property="num"/>
+    </resultMap>
+    <resultMap id="compareToolMap" type="cn.edu.bupt.sice.po.CompareDetailPO">
+        <result column="task_id" property="taskId"/>
+        <result column="task_name" property="taskName"/>
+        <result column="high" property="high_num"/>
+        <result column="mid" property="mid_num"/>
+        <result column="low" property="low_num"/>
+        <result column="total" property="total_num"/>
+    </resultMap>
+    <insert id="insertIntoTask" parameterType="cn.edu.bupt.sice.vo.CompareTaskVO" useGeneratedKeys="true" keyProperty="taskId">
+        insert into compare_task(task_name,check_status,result_path_findbugs,result_path_pmd,zip_path,launch_time)
+        values(#{taskName},#{checkStatus},#{resultPathFindBugs},#{resultPathPMD},#{zipPath},#{launchTime})
+    </insert>
+    <update id="updateTask" parameterType="cn.edu.bupt.sice.vo.CompareTaskVO">
+        update compare_task
+        set check_status=#{checkStatus},result_path_findbugs=#{resultPathFindBugs},result_path_pmd=#{resultPathPMD}
+        where task_id=#{taskId}
+    </update>
+    <select id="getCompareDetail" resultMap="compareDetailMap">
+        select task.task_id,task.task_name,sta.high_num,sta.mid_num,sta.low_num,sta.total_num,ex.rule_name,ex.num
+        from compare_task task join statistics sta on task.task_id=sta.statistics_task_id
+        join statistics_ex ex on ex.statistics_id=sta.statistics_id
+        where sta.task_type=2 and tool=#{tool} and task.task_id=#{taskId}
+    </select>
+    <select id="getCompareToolInfo" resultMap="compareToolMap" parameterType="int">
+        select task.task_id,task.task_name,sta.high_num,sta.mid_num,sta.low_num,sta.total_num
+        from compare_task task join statistics sta on task.task_id=sta.statistics_task_id
+        where sta.task_type=2 and sta.tool=#{_paremeter}
+    </select>
+    <select id="getAllCompareNum" resultType="int">
+        select count(*) from compare_task
+    </select>
+    <select id="queryCompareTask" resultMap="compareTaskMap" parameterType="long">
+        select * from compare_task where task_id=#{_parameter}
+    </select>
+</mapper>
