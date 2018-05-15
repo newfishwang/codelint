@@ -2,10 +2,12 @@ package cn.edu.bupt.sice.web;
 
 
 import cn.edu.bupt.sice.service.ITaskService;
+import cn.edu.bupt.sice.vo.TaskDetailVO;
 import cn.edu.bupt.sice.vo.TaskVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,7 +27,6 @@ public class TaskController {
         return "upload";
     }
     @PostMapping("/handleUpload")
-    @ResponseBody
     public String handleFile(@RequestParam("file") MultipartFile file) {
         try {
             taskService.handleUpload(file);
@@ -36,14 +37,30 @@ public class TaskController {
         return "task";
     }
     @GetMapping("/list")
-    public String getTaskList(Map<String,Object> map) {
+    public String getTaskList(Model model) {
         List<TaskVO> taskVOs;
         try  {
            taskVOs = taskService.getTaskList();
-           map.put("tasks",taskVOs);
+           model.addAttribute("tasks",taskVOs);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return "task";
+    }
+    @GetMapping("/detail")
+    @ResponseBody
+    public TaskDetailVO getTaskDetail(@RequestParam("taskId") long taskId) {
+        TaskDetailVO taskDetailVO = null;
+        try {
+            taskDetailVO = taskService.getTaskDetail(taskId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return taskDetailVO;
+    }
+    @GetMapping("/direct")
+    public String directTo(@RequestParam("taskId") long taskId,Model model) {
+        model.addAttribute("taskId",taskId);
+        return "taskDetail";
     }
 }

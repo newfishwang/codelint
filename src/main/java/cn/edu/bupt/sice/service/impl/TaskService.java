@@ -44,12 +44,7 @@ public class TaskService implements ITaskService{
     }
     @Override
     public List<TaskVO> getTaskList() throws Exception {
-        TaskVO taskVO = new TaskVO();
-        taskVO.setTaskName("haha");
-        taskVO.setCheckStatus(2);
-        taskVO.setTaskId(1);
-        List<TaskVO> taskVOList = new ArrayList<>();
-        taskVOList.add(taskVO);
+        List<TaskVO> taskVOList = taskMapper.queryAllTasks();
         return taskVOList;
     }
     @Override

@@ -8,4 +8,7 @@ public class TaskBriefVO {
     private String taskName;
     private int tool;
     private int bugNum;
+    private int highNum;
+    private int midNum;
+    private int lowNum;
 }

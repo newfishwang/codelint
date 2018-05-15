@@ -37,10 +37,16 @@
         where sta.task_type=1 and task_id=#{_parameter}
         order by task.task_id
     </select>
+    <select id="queryLastTasks" resultMap="TaskMap">
+        select * from chk_task order by launch_time desc limit 4
+    </select>
     <select id="getAllTaskNum" resultType="int">
         select count(*) from chk_task
     </select>
     <select id="getTask" parameterType="long" resultMap="TaskMap">
         select * from chk_task where task_id=#{_parameter};
+    </select>
+    <select id="queryAllTasks" resultMap="TaskMap">
+        select * from chk_task;
     </select>
 </mapper>

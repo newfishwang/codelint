@@ -34,6 +34,9 @@ public class HomeService implements IHomeService {
             TaskBriefVO taskBriefVO  = new TaskBriefVO();
             taskBriefVO.setTaskName(taskVO.getTaskName());
             taskBriefVO.setBugNum(statisticsVO.getTotalNum());
+            taskBriefVO.setHighNum(statisticsVO.getHighNum());
+            taskBriefVO.setMidNum(statisticsVO.getMidNum());
+            taskBriefVO.setLowNum(statisticsVO.getLowNum());
             taskBriefVO.setTaskId(taskVO.getTaskId());
             taskBriefVO.setTool(taskVO.getCheckTool());
             taskBriefVOList.add(taskBriefVO);
@@ -46,9 +49,15 @@ public class HomeService implements IHomeService {
             for (StatisticsVO item : statisticsVOs) {
                 if (item.getTool() == CheckTool.FINDBUGS.getToolCode()) {
                     compareTaskBrief.setBugNumF(item.getTotalNum());
+                    compareTaskBrief.setHighNumF(item.getHighNum());
+                    compareTaskBrief.setMidNumF(item.getMidNum());
+                    compareTaskBrief.setLowNumF(item.getLowNum());
                 }
                 if (item.getTool() == CheckTool.PMD.getToolCode()) {
                     compareTaskBrief.setBugNumP(item.getTotalNum());
+                    compareTaskBrief.setHighNumP(item.getHighNum());
+                    compareTaskBrief.setMidNumP(item.getMidNum());
+                    compareTaskBrief.setLowNumP(item.getLowNum());
                 }
             }
             compareTaskBriefList.add(compareTaskBrief);

@@ -15,4 +15,5 @@ public interface ITaskMapper {
     List<TaskVO> queryLastTasks();
     int getAllTaskNum();
     TaskVO getTask(long taskId);
+    List<TaskVO> queryAllTasks();
 }

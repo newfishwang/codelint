@@ -48,6 +48,9 @@
         from compare_task task join statistics sta on task.task_id=sta.statistics_task_id
         where sta.task_type=2 and sta.tool=#{_paremeter}
     </select>
+    <select id="queryLastTasks" resultMap="compareTaskMap">
+        select * from compare_task order by launch_time desc limit 4
+    </select>
     <select id="getAllCompareNum" resultType="int">
         select count(*) from compare_task
     </select>
