@@ -78,4 +78,8 @@ public class CompareTaskService implements ICompareTaskService {
     public CompareTaskVO queryCompareTask(long taskId) throws Exception {
         return compareTaskMapper.queryCompareTask(taskId);
     }
+    @Override
+    public List<CompareTaskVO> getCompareTaskList() throws Exception {
+        return compareTaskMapper.queryAllTasks();
+    }
 }

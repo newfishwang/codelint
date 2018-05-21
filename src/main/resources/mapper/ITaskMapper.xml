@@ -17,6 +17,9 @@
         <result column="high_num" property="high"/>
         <result column="mid_num" property="mid"/>
         <result column="low_num" property="low"/>
+        <result column="class_num" property="classNum"/>
+        <result column="package_num" property="packageNum"/>
+        <result column="line_num" property="lineNum"/>
         <result column="rule_name" property="ruleName"/>
         <result column="num" property="num"/>
     </resultMap>
@@ -31,7 +34,7 @@
         where task_id = #{taskId}
     </update>
     <select id="getTaskDetail" parameterType="long" resultMap="TaskDetailMap">
-        select task.task_id,task.task_name,task.check_tool,sta.high_num,sta.mid_num,sta.low_num,rule_name,num from chk_task task
+        select task.task_id,task.task_name,task.check_tool,sta.high_num,sta.mid_num,sta.low_num,sta.class_num,package_num,line_num,rule_name,num from chk_task task
         join statistics sta on sta.statistics_task_id=task.task_id
         join statistics_ex ex on ex.statistics_id=sta.statistics_id
         where sta.task_type=1 and task_id=#{_parameter}

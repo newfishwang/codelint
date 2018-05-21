@@ -12,5 +12,8 @@ public class TaskDetailVO {
     private int high;
     private int mid;
     private int low;
+    private int classNum;
+    private int packageNum;
+    private int lineNum;
     private List<RuleVO> ruleVOList;
 }

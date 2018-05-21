@@ -13,20 +13,24 @@
     <resultMap id="compareDetailMap" type="cn.edu.bupt.sice.po.CompareDetailPO">
         <result column="task_id" property="taskId"/>
         <result column="task_name" property="taskName"/>
-        <result column="high" property="high_num"/>
-        <result column="mid" property="mid_num"/>
-        <result column="low" property="low_num"/>
-        <result column="total" property="total_num"/>
+        <result column="high_num" property="high"/>
+        <result column="mid_num" property="mid"/>
+        <result column="low_num" property="low"/>
+        <result column="total_num" property="total"/>
         <result column="rule_name" property="ruleName"/>
         <result column="num" property="num"/>
     </resultMap>
     <resultMap id="compareToolMap" type="cn.edu.bupt.sice.po.CompareDetailPO">
         <result column="task_id" property="taskId"/>
         <result column="task_name" property="taskName"/>
-        <result column="high" property="high_num"/>
-        <result column="mid" property="mid_num"/>
-        <result column="low" property="low_num"/>
-        <result column="total" property="total_num"/>
+        <result column="high_num" property="high"/>
+        <result column="mid_num" property="mid"/>
+        <result column="low_num" property="low"/>
+        <result column="total_num" property="total"/>
+    </resultMap>
+    <resultMap id="topMap" type="cn.edu.bupt.sice.po.CompareDetailPO">
+        <result column="rule_name" property="ruleName"/>
+        <result column="num" property="num"/>
     </resultMap>
     <insert id="insertIntoTask" parameterType="cn.edu.bupt.sice.vo.CompareTaskVO" useGeneratedKeys="true" keyProperty="taskId">
         insert into compare_task(task_name,check_status,result_path_findbugs,result_path_pmd,zip_path,launch_time)
@@ -48,8 +52,16 @@
         from compare_task task join statistics sta on task.task_id=sta.statistics_task_id
         where sta.task_type=2 and sta.tool=#{_paremeter}
     </select>
+    <select id="getTop" resultMap="topMap" parameterType="int">
+        select sta.tool,ex.rule_name,ex.num
+        from statistics sta join statistics_ex ex on  ex.statistics_id=sta.statistics_id
+        where sta.task_type=2 and sta.tool=#{_paremeter}
+    </select>
     <select id="queryLastTasks" resultMap="compareTaskMap">
         select * from compare_task order by launch_time desc limit 4
+    </select>
+    <select id="queryAllTasks" resultMap="compareTaskMap">
+        select * from compare_task order by launch_time desc
     </select>
     <select id="getAllCompareNum" resultType="int">
         select count(*) from compare_task

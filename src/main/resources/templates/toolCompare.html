@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title></title>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div style="margin: -50px 10px 100px 10px;">
+    <img src="/img/logo.png" style="width: auto; height: auto;margin: 10px 10px -30px 10px;"/>
+    <ul class="nav nav-tabs" style="margin: -100px 10px 10px 400px">
+        <li><a href="/home/brief">首页</a></li>
+        <li><a href="/tasks/list">普通任务</a></li>
+        <li><a href="/compare/list">对比任务</a></li>
+        <li class="active"><a href="/tool/direct">工具对比</a></li>
+    </ul>
+</div>
+<div>
+    <div>
+        <div id="containerF" style="width: 550px; height: 400px; margin: 10px 100px 10px 400px"></div>
+        <div class="panel panel-info" style="margin:-300px 100px 100px 100px; width:300px;">
+            <div class="panel-heading">
+                findbugs检测缺陷数
+            </div>
+            <div class="panel-body">
+                <p>高：<b th:text="${detail.highF}"></b></p>
+                <p>中：<b th:text="${detail.midF}"></b></p>
+                <p>低：<b th:text="${detail.lowF}"></b></p>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div id="containerP" style="width: 550px; height: 400px; margin: -370px 100px 10px 1300px"></div>
+        <div class="panel panel-info" style="margin:-300px 100px 200px 1000px; width:300px;">
+            <div class="panel-heading">
+                pmd检测缺陷数
+            </div>
+            <div class="panel-body">
+                <p>高：<b th:text="${detail.highP}"></b></p>
+                <p>中：<b th:text="${detail.midP}"></b></p>
+                <p>低：<b th:text="${detail.lowP}"></b></p>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="panel panel-primary" style="margin:10px 10px 20px 10px; width: 45%">
+            <div class="panel-heading">
+                <h3 class="panel-title">findbugs缺陷类型top10</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <th>规则名</th>
+                    <th>检测出总数量</th>
+                    <tr th:each="rule:${detail.ruleVOListF}">
+                        <td th:text="${rule.ruleName}" style="color: dodgerblue"></td>
+                        <td th:text="${rule.num}"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="panel panel-primary" style="margin:-295px 100px 200px 950px; width:45%">
+            <div class="panel-heading">
+                <h3 class="panel-title">pmd缺陷类型top10</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <th>规则名</th>
+                    <th>检测出总数量</th>
+                    <tr th:each="rule:${detail.ruleVOListP}">
+                        <td th:text="${rule.ruleName}" style="color: dodgerblue"></td>
+                        <td th:text="${rule.num}"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script language="JavaScript">
+    $(document).ready(function() {
+        var seriesdF;
+        var seriesdP;
+        $.ajax({
+            type:"get",
+            url:"/tool/detail",
+            dataType:"json",
+            success:function (data) {
+                seriesdF= [{
+                    type: 'pie',
+                    name: '缺陷等级',
+                    data: [
+                        ['高',   data.highF],
+                        ['低',   data.lowF],
+                        {
+                            name: '中',
+                            y: data.midF,
+                            sliced: true,
+                            selected: true
+                        }
+                    ]
+                }];
+                seriesdP= [{
+                    type: 'pie',
+                    name: '缺陷等级',
+                    data: [
+                        ['高',   data.highP],
+                        ['低',   data.lowP],
+                        {
+                            name: '中',
+                            y: data.midP,
+                            sliced: true,
+                            selected: true
+                        }
+                    ]
+                }];
+                var chart = {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                };
+                var title = {
+                    text: '任务检测结果统计'
+                };
+                var tooltip = {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                };
+                var credits = {
+                    enabled:false
+                };
+                var plotOptions = {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: false
+                        },
+                        showInLegend: true
+                    }
+                };
+
+                var jsonF = {};
+                jsonF.chart = chart;
+                jsonF.title = title;
+                jsonF.tooltip = tooltip;
+                jsonF.series = seriesdF;
+                jsonF.plotOptions = plotOptions;
+                jsonF.credits=credits;
+
+                var jsonP = {};
+                jsonP.chart = chart;
+                jsonP.title = title;
+                jsonP.tooltip = tooltip;
+                jsonP.series = seriesdP;
+                jsonP.plotOptions = plotOptions;
+                jsonP.credits=credits;
+                $('#containerP').highcharts(jsonP);
+                $('#containerF').highcharts(jsonF);
+            },
+            error:function () {
+
+            }
+        });
+
+    });
+</script>
+</body>

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:float="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>codelint</title>
     <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -12,7 +12,21 @@
     function bbb() {
         $.ajax({
             type:"get",
-            url:"/tasks/uploadCompare",
+            url:"/compare/upload",
+            success:function () {
+
+            },
+            error:function () {
+
+            }
+        })
+    }
+    function getDetail(obj) {
+        var taskId = $(obj).attr("id");
+        $.ajax({
+            type:"get",
+            url:"/tasks/detail",
+            data:{"taskId":taskId},
             success:function () {
 
             },
@@ -22,42 +36,35 @@
         })
     }
 </script>
-<p></p>
-<br/>
-<ul class="nav nav-tabs">
-    <li><a href="#">首页</a></li>
-    <li class="active"><a href="#">任务管理</a></li>
-    <li><a href="#">报告管理</a></li>
-</ul>
-<br/><br/><br/>
-<div align="center">
-    <button class="btn btn-default" type="submit" style="margin-left: 1200px" onclick="bbb()">发起检测</button>
+<div style="margin: -50px 10px 100px 10px;">
+    <img src="/img/logo.png" style="width: auto; height: auto;margin: 10px 10px -30px 10px;"/>
+    <ul class="nav nav-tabs" style="margin: -100px 10px 10px 400px">
+        <li><a href="/home/brief">首页</a></li>
+        <li><a href="/tasks/list">普通任务</a></li>
+        <li class="active"><a href="/compare/list">对比任务</a></li>
+        <li><a href="/tool/direct">工具对比</a></li>
+    </ul>
 </div>
-
-<table class="table">
-    <caption>任务列表</caption>
-    <thead>
-    <tr>
-        <th width="200">任务名</th>
-        <th width="200">发起时间</th>
-        <th width="200">检测状态</th>
-        <th width="800">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="task,taskStat : ${tasks}">
-        <td th:text="${task.taskName}"></td>
-        <td th:text="${task.taskId}"></td>
-        <td th:text="${task.checkStatus}"></td>
-        <td><div class="btn-group">
-            <button type="button" class="btn btn-default">查看结果</button>
-            <button type="button" class="btn btn-default">导出报告</button>
-            <button type="button" class="btn btn-default">删除</button>
-        </div>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<div class="panel panel-info" style="margin-left: 10px">
+    <div class="panel-heading">任务列表<button class="btn btn-default" type="submit" style="margin-left: 1200px"><a href="/compare/upload">发起检测</a></button></div>
+    <table class="table">
+        <th>任务名</th>
+        <th>发起时间</th>
+        <th>检测状态</th>
+        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作</th>
+        <tr th:each="task:${compare}">
+            <td th:text="${task.taskName}" style="color: dodgerblue"></td>
+            <td th:text="${task.launchTime}"></td>
+            <td style="color: yellowgreen"><span th:if="${task.checkStatus eq 2}">检测成功</span></td>
+            <td>
+                <a th:href="@{/compare/direct(taskId=${task.taskId})}">检测统计</a><b>|</b>
+                <a th:href="@{/report/download(taskId=${task.taskId},taskType=2,tool=1)}">查看findbugs报告</a><b>|</b>
+                <a th:href="@{/report/download(taskId=${task.taskId},taskType=2,tool=2)}">查看pmd报告</a><b>|</b>
+                <a th:href="@{/compare/detail(taskId=${task.taskId})}">删除</a>
+            </td>
+        </tr>
+    </table>
+</div>
 
 
 </body>

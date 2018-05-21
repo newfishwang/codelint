@@ -14,6 +14,8 @@ public interface ICompareTaskMapper {
     List<CompareDetailPO> getCompareDetail(@Param("taskId") long taskId, @Param("tool") int tool);
     List<CompareDetailPO> getCompareToolInfo(int tool);
     List<CompareTaskVO> queryLastTasks();
+    List<CompareTaskVO> queryAllTasks();
     int getAllCompareNum();
     CompareTaskVO queryCompareTask(long taskId);
+    List<CompareDetailPO> getTop(int tool);
 }

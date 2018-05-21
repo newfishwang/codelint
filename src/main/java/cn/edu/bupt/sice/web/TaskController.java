@@ -27,9 +27,12 @@ public class TaskController {
         return "upload";
     }
     @PostMapping("/handleUpload")
-    public String handleFile(@RequestParam("file") MultipartFile file) {
+    public String handleFile(@RequestParam("file") MultipartFile file,@RequestParam("name") String name,@RequestParam("tool") String tool,Model model) {
+        List<TaskVO> taskVOs;
         try {
             taskService.handleUpload(file);
+            taskVOs = taskService.getTaskList();
+            model.addAttribute("tasks",taskVOs);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -61,6 +64,13 @@ public class TaskController {
     @GetMapping("/direct")
     public String directTo(@RequestParam("taskId") long taskId,Model model) {
         model.addAttribute("taskId",taskId);
+        TaskDetailVO taskDetailVO = null;
+        try {
+            taskDetailVO = taskService.getTaskDetail(taskId);
+            model.addAttribute("detail",taskDetailVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "taskDetail";
     }
 }
