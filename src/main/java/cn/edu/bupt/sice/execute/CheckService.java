@@ -1,6 +1,7 @@
 package cn.edu.bupt.sice.execute;
 
 
+import cn.edu.bupt.sice.config.CodelintConfig;
 import cn.edu.bupt.sice.mapper.ICompareTaskMapper;
 import cn.edu.bupt.sice.mapper.ITaskMapper;
 import cn.edu.bupt.sice.parse.HtmlParser;
@@ -31,14 +32,16 @@ public class CheckService {
     private ICompareTaskMapper compareTaskMapper;
     @Autowired
     private IStatisticsService statisticsService;
+    @Autowired
+    private CodelintConfig codelintConfig;
     @Async
     public String check(TaskVO taskVO) {
         String line;
         StringBuilder sb = new StringBuilder();
         String resultPath = UUID.randomUUID().toString();
         if (taskVO.getCheckTool() == CheckTool.FINDBUGS.getToolCode()) {
-            String checkLine = "cmd$/c$\"E:/open/findbugs-3.0.1/bin/findbugs.bat -textui -html -output " +
-                    "E:/open/results/" + resultPath + ".html" + " D:/projectsForGraduation/zip/" + taskVO.getZipPath() + ".zip" +"\"";
+            String checkLine = "cmd$/c$\""+  codelintConfig.getFindbugsPath() + "findbugs.bat -textui -html -output " +
+                    codelintConfig.getReportPath() + resultPath + ".html " + codelintConfig.getZipPath() + taskVO.getZipPath() + ".zip" +"\"";
             try {
                 ProcessBuilder processBuilder = new ProcessBuilder(checkLine.split("\\$"));
                 Process process = processBuilder.start();
@@ -70,8 +73,8 @@ public class CheckService {
                 e.printStackTrace();
             }
         } else {
-            String checkLine = "cmd$/c$\"E:/open/pmd-bin-6.2.0/bin/pmd.bat -dir D:/projectsForGraduation/zip/" +taskVO.getZipPath() + ".zip"+
-                    " -f summaryhtml -r E:/open/results/" + resultPath+ ".html -rulesets E:/open/pmd-bin-6.2.0/myrule.xml -encoding UTF-8\"";
+            String checkLine = "cmd$/c$\"" + codelintConfig.getPmdPath() + "pmd.bat -dir " + codelintConfig.getZipPath() +taskVO.getZipPath() + ".zip"+
+                    " -f summaryhtml -r "+codelintConfig.getReportPath() + resultPath+ ".html -rulesets " + codelintConfig.getRulePath() + "myrule.xml -encoding UTF-8\"";
             try {
                 ProcessBuilder processBuilder = new ProcessBuilder(checkLine.split("\\$"));
                 Process process = processBuilder.start();
@@ -156,10 +159,10 @@ public class CheckService {
         StringBuffer sbP = new StringBuffer();
         String resultPathP = UUID.randomUUID().toString();
         String resultPathF = UUID.randomUUID().toString();
-        String checkLineF = "cmd$/c$\"E:/open/findbugs-3.0.1/bin/findbugs.bat -textui -html -output " +
-                "E:/open/results/" + resultPathF + ".html" + " D:/projectsForGraduation/zip/" + compareTaskVO.getZipPath() + ".zip" +"\"";
-        String checkLineP = "cmd$/c$\"E:/open/pmd-bin-6.2.0/bin/pmd.bat -dir D:/projectsForGraduation/zip/" +compareTaskVO.getZipPath() + ".zip"+
-                " -f summaryhtml -r E:/open/results/" + resultPathP+ ".html -rulesets E:/open/pmd-bin-6.2.0/myrule.xml -encoding UTF-8\"";
+        String checkLineF = "cmd$/c$\""+  codelintConfig.getFindbugsPath() + "findbugs.bat -textui -html -output " +
+                codelintConfig.getReportPath() + resultPathF + ".html " + codelintConfig.getZipPath() + compareTaskVO.getZipPath() + ".zip" +"\"";
+        String checkLineP = "cmd$/c$\"" + codelintConfig.getPmdPath() + "pmd.bat -dir " + codelintConfig.getZipPath() +compareTaskVO.getZipPath() + ".zip"+
+                " -f summaryhtml -r "+codelintConfig.getReportPath() + resultPathP+ ".html -rulesets " + codelintConfig.getRulePath() + "myrule.xml -encoding UTF-8\"";
         try {
             ProcessBuilder processBuilderF = new ProcessBuilder(checkLineF.split("\\$"));
             ProcessBuilder processBuilderP = new ProcessBuilder(checkLineP.split("\\$"));

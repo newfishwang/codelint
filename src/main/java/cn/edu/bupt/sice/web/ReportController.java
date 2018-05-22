@@ -30,7 +30,7 @@ public class ReportController {
         try {
             if (taskType == TaskType.CHECK_TASK.getCode()) {
                 reportPath = taskService.queryTask(taskId).getResultPath();
-                reportName = taskService.queryTask(taskId).getTaskName();
+                reportName = taskService.queryTask(taskId).getTaskName() + ".html";
             } else {
                 if (tool == CheckTool.FINDBUGS.getToolCode()) {
                     reportPath = compareTaskService.queryCompareTask(taskId).getResultPathFindBugs();

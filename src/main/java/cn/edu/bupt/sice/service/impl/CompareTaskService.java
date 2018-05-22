@@ -1,5 +1,6 @@
 package cn.edu.bupt.sice.service.impl;
 
+import cn.edu.bupt.sice.config.CodelintConfig;
 import cn.edu.bupt.sice.execute.CheckService;
 import cn.edu.bupt.sice.mapper.ICompareTaskMapper;
 import cn.edu.bupt.sice.po.CompareDetailPO;
@@ -31,6 +32,8 @@ public class CompareTaskService implements ICompareTaskService {
     private ICompareTaskMapper compareTaskMapper;
     @Autowired
     private CheckService checkService;
+    @Autowired
+    private CodelintConfig codelintConfig;
     @Override
     public void handleUploadCompare(MultipartFile file,String name) throws Exception {
         CompareTaskVO compareTaskVO = new CompareTaskVO();
@@ -41,7 +44,7 @@ public class CompareTaskService implements ICompareTaskService {
         compareTaskVO.setResultPathFindBugs("");
         compareTaskVO.setResultPathPMD("");
         compareTaskMapper.insertIntoTask(compareTaskVO);
-        FileUtil.uploadFile(file.getBytes(),preFilePath,compareTaskVO.getZipPath()+".zip");
+        FileUtil.uploadFile(file.getBytes(),codelintConfig.getZipPath(),compareTaskVO.getZipPath()+".zip");
         checkService.checkCompare(compareTaskVO);
     }
     @Override

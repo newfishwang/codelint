@@ -9,9 +9,10 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "codelint")
 @Data
-public class codelintConfig {
+public class CodelintConfig {
     private String reportPath;
     private String zipPath;
     private String findbugsPath;
     private String pmdPath;
+    private String rulePath;
 }

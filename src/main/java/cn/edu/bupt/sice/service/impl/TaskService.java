@@ -1,5 +1,6 @@
 package cn.edu.bupt.sice.service.impl;
 
+import cn.edu.bupt.sice.config.CodelintConfig;
 import cn.edu.bupt.sice.execute.CheckService;
 import cn.edu.bupt.sice.mapper.ITaskMapper;
 import cn.edu.bupt.sice.po.TaskDetailPO;
@@ -30,6 +31,8 @@ public class TaskService implements ITaskService{
     private ITaskMapper taskMapper;
     @Autowired
     private CheckService checkService;
+    @Autowired
+    private CodelintConfig codelintConfig;
     @Override
     public void handleUpload(MultipartFile file,String name,int tool) throws Exception {
         String contentType = file.getContentType();
@@ -42,7 +45,7 @@ public class TaskService implements ITaskService{
         taskVO.setResultPath("");
         taskVO.setZipPath(UUID.randomUUID().toString());
         taskMapper.insertIntoTask(taskVO);
-        FileUtil.uploadFile(file.getBytes(),preFilePath,taskVO.getZipPath()+".zip");
+        FileUtil.uploadFile(file.getBytes(),codelintConfig.getZipPath(),taskVO.getZipPath()+".zip");
         checkService.check(taskVO);
     }
     @Override
