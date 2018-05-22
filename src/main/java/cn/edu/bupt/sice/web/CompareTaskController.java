@@ -1,9 +1,7 @@
 package cn.edu.bupt.sice.web;
 
 import cn.edu.bupt.sice.service.ICompareTaskService;
-import cn.edu.bupt.sice.vo.CompareDetailVO;
-import cn.edu.bupt.sice.vo.CompareTaskVO;
-import cn.edu.bupt.sice.vo.TaskDetailVO;
+import cn.edu.bupt.sice.vo.*;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,10 +26,10 @@ public class CompareTaskController {
     }
 
     @RequestMapping("/handleUpload")
-    public String handleUploadCompare(@RequestParam("file") MultipartFile file, Model model) {
-        List<CompareTaskVO> compareTaskVOs;
+    public String handleUploadCompare(@RequestParam("file") MultipartFile file,@RequestParam("name") String name, Model model) {
+        List<CompareTaskListVO> compareTaskVOs;
         try {
-            compareTaskService.handleUploadCompare(file);
+            compareTaskService.handleUploadCompare(file,name);
             compareTaskVOs = compareTaskService.getCompareTaskList();
             model.addAttribute("compare",compareTaskVOs);
         } catch (Exception e) {
@@ -41,7 +39,7 @@ public class CompareTaskController {
     }
     @RequestMapping("/list")
     public String getCompareList(Model model) {
-        List<CompareTaskVO> compareTaskVOs;
+        List<CompareTaskListVO> compareTaskVOs;
         try {
             compareTaskVOs = compareTaskService.getCompareTaskList();
             model.addAttribute("compare",compareTaskVOs);
@@ -73,6 +71,18 @@ public class CompareTaskController {
             e.printStackTrace();
         }
         return "compareDetail";
+    }
+    @RequestMapping("/delete")
+    public String delete(@RequestParam("taskId") long taskId,Model model) {
+        List<CompareTaskListVO> taskVOs;
+        try {
+            compareTaskService.deleteCompare(taskId);
+            taskVOs = compareTaskService.getCompareTaskList();
+            model.addAttribute("compare",taskVOs);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "compareTask";
     }
 
 }

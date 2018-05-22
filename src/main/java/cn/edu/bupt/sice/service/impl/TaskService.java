@@ -8,6 +8,7 @@ import cn.edu.bupt.sice.util.CheckTool;
 import cn.edu.bupt.sice.util.FileUtil;
 import cn.edu.bupt.sice.vo.RuleVO;
 import cn.edu.bupt.sice.vo.TaskDetailVO;
+import cn.edu.bupt.sice.vo.TaskListVO;
 import cn.edu.bupt.sice.vo.TaskVO;
 import org.apache.tomcat.util.digester.Rule;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -28,13 +31,13 @@ public class TaskService implements ITaskService{
     @Autowired
     private CheckService checkService;
     @Override
-    public void handleUpload(MultipartFile file) throws Exception {
+    public void handleUpload(MultipartFile file,String name,int tool) throws Exception {
         String contentType = file.getContentType();
         String fileName = file.getOriginalFilename();
         TaskVO taskVO = new TaskVO();
-        taskVO.setTaskName(fileName);
+        taskVO.setTaskName(name);
         taskVO.setCheckStatus(1);
-        taskVO.setCheckTool(CheckTool.FINDBUGS.getToolCode());
+        taskVO.setCheckTool(tool);
         taskVO.setLaunchTime(new Date());
         taskVO.setResultPath("");
         taskVO.setZipPath(UUID.randomUUID().toString());
@@ -43,9 +46,17 @@ public class TaskService implements ITaskService{
         checkService.check(taskVO);
     }
     @Override
-    public List<TaskVO> getTaskList() throws Exception {
+    public List<TaskListVO> getTaskList() throws Exception {
         List<TaskVO> taskVOList = taskMapper.queryAllTasks();
-        return taskVOList;
+        List<TaskListVO> taskListVOList = new ArrayList<>();
+        if (taskVOList != null && taskVOList.size() > 0) {
+            for (TaskVO taskVO : taskVOList) {
+                TaskListVO taskListVO = new TaskListVO(taskVO);
+                taskListVO.setLaunchTime(dateFormatToSecond(taskVO.getLaunchTime()));
+                taskListVOList.add(taskListVO);
+            }
+        }
+        return taskListVOList;
     }
     @Override
     public TaskDetailVO getTaskDetail(long taskId) throws Exception {
@@ -55,6 +66,11 @@ public class TaskService implements ITaskService{
             taskDetailVO.setTaskId(taskId);
             taskDetailVO.setTaskName(taskDetailPOs.get(0).getTaskName());
             taskDetailVO.setCheckTool(taskDetailPOs.get(0).getCheckTool());
+            if (taskDetailVO.getCheckTool() == CheckTool.FINDBUGS.getToolCode()) {
+                taskDetailVO.setClassNum(taskDetailPOs.get(0).getClassNum());
+                taskDetailVO.setPackageNum(taskDetailPOs.get(0).getPackageNum());
+                taskDetailVO.setLineNum(taskDetailPOs.get(0).getLineNum());
+            }
             taskDetailVO.setHigh(taskDetailPOs.get(0).getHigh());
             taskDetailVO.setMid(taskDetailPOs.get(0).getMid());
             taskDetailVO.setLow(taskDetailPOs.get(0).getLow());
@@ -72,6 +88,17 @@ public class TaskService implements ITaskService{
     @Override
     public TaskVO queryTask(long taskId) throws Exception {
         return taskMapper.getTask(taskId);
+    }
+
+    @Override
+    public void deleteTask(long taskId) throws Exception {
+        TaskVO taskVO = taskMapper.getTask(taskId);
+        taskMapper.deleteTask(taskId);
+        // TODO: 2018/5/21 级联删除报告文件
+    }
+    private String dateFormatToSecond(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateFormat.format(date);
     }
 
 }

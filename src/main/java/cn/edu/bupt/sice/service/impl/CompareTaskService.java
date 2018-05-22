@@ -7,6 +7,7 @@ import cn.edu.bupt.sice.service.ICompareTaskService;
 import cn.edu.bupt.sice.util.CheckTool;
 import cn.edu.bupt.sice.util.FileUtil;
 import cn.edu.bupt.sice.vo.CompareDetailVO;
+import cn.edu.bupt.sice.vo.CompareTaskListVO;
 import cn.edu.bupt.sice.vo.CompareTaskVO;
 import cn.edu.bupt.sice.vo.RuleVO;
 import org.apache.tomcat.util.digester.Rule;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,9 +32,9 @@ public class CompareTaskService implements ICompareTaskService {
     @Autowired
     private CheckService checkService;
     @Override
-    public void handleUploadCompare(MultipartFile file) throws Exception {
+    public void handleUploadCompare(MultipartFile file,String name) throws Exception {
         CompareTaskVO compareTaskVO = new CompareTaskVO();
-        compareTaskVO.setTaskName(file.getOriginalFilename());
+        compareTaskVO.setTaskName(name);
         compareTaskVO.setLaunchTime(new Date());
         compareTaskVO.setCheckStatus(1);
         compareTaskVO.setZipPath(UUID.randomUUID().toString());
@@ -79,7 +82,26 @@ public class CompareTaskService implements ICompareTaskService {
         return compareTaskMapper.queryCompareTask(taskId);
     }
     @Override
-    public List<CompareTaskVO> getCompareTaskList() throws Exception {
-        return compareTaskMapper.queryAllTasks();
+    public List<CompareTaskListVO> getCompareTaskList() throws Exception {
+        List<CompareTaskVO> compareTaskVOList = compareTaskMapper.queryAllTasks();
+        List<CompareTaskListVO> compareTaskListVOList = new ArrayList<>();
+        if (compareTaskVOList != null && compareTaskVOList.size() > 0) {
+            for (CompareTaskVO compareTaskVO : compareTaskVOList) {
+                CompareTaskListVO compareTaskListVO = new CompareTaskListVO(compareTaskVO);
+                String date = dateFormatToSecond(compareTaskVO.getLaunchTime());
+                compareTaskListVO.setLaunchTime(date);
+                compareTaskListVOList.add(compareTaskListVO);
+            }
+        }
+        return compareTaskListVOList;
+    }
+    @Override
+    public void deleteCompare(long taskId) throws Exception {
+        // TODO: 2018/5/21 级联删除报告文件
+        compareTaskMapper.deleteCompare(taskId);
+    }
+    private String dateFormatToSecond(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateFormat.format(date);
     }
 }

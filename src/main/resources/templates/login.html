@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>iOS学院教登录界面</title>
+    <title>codelint</title>
     <style type="text/css">
         *{
             margin: 0;
@@ -11,7 +11,7 @@
 
         body{
             /*不平铺*/
-            background: url("/img/codelint.png") no-repeat;
+            background: url("/img/bg.png") no-repeat;
             background-size: cover;
             text-align: center;
         }
@@ -149,41 +149,31 @@
     </style>
 </head>
 <body>
-<div id="panel">
-    <!--第一部分-->
-    <div class="header">
-        <h2>欢迎登陆XXXX直播课堂</h2>
+<form th:action="@{/login}" method="post">
+    <div id="panel">
+        <!--第一部分-->
+        <div class="header">
+            <h2>欢迎登陆CODELINT</h2>
 
-    </div>
-    <!--第二部分-->
-    <div class="content">
-        <!--用户名-->
-        <div class="user_name">
-
-            <input type="text" placeholder="请输入用户名">
         </div>
-        <!--用户密码-->
-        <div class="pass_word">
-
-            <input type="text" placeholder="请输入密码">
-        </div>
-        <!--自动登录-->
-        <div class="setting">
-            <!--自动登录-->
-            <a href="#">
-                <input type="checkbox">
-                下次自动登录
-            </a>
-            <!--忘记密码-->
-            <a href="#" class="forget_pwd"> 忘记密码 ？</a>
-        </div>
-        <div class="login_btn">
-            <button>登录</button>
-        </div>
-        <div class="reg">
-            还没有账号？<a href="#">立即注册</a>
+        <!--第二部分-->
+        <div class="content">
+            <!--用户名-->
+            <div class="user_name">
+                <img src="/img/icon_people.png">
+                <input type="text" name="username" placeholder="请输入用户名/手机号">
+            </div>
+            <!--用户密码-->
+            <div class="pass_word">
+                <img src="/img/icon_password.png">
+                <input type="password" name="password" placeholder="请输入密码">
+            </div>
+            <div class="login_btn">
+                <button>登录</button>
+            </div>
         </div>
     </div>
-</div>
+</form>
+
 </body>
 </html>

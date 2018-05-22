@@ -16,4 +16,5 @@ public interface ITaskMapper {
     int getAllTaskNum();
     TaskVO getTask(long taskId);
     List<TaskVO> queryAllTasks();
+    void deleteTask(long taskId);
 }

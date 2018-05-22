@@ -18,6 +18,9 @@
         <li><a href="/compare/list">对比任务</a></li>
         <li class="active"><a href="/tool/direct">工具对比</a></li>
     </ul>
+    <form th:action="@{/logout}" method="post" style="margin: -40px 10px 10px 1800px">
+        <input type="submit" value="注销"/>
+    </form>
 </div>
 <div>
     <div>
@@ -62,7 +65,7 @@
                 </table>
             </div>
         </div>
-        <div class="panel panel-primary" style="margin:-295px 100px 200px 950px; width:45%">
+        <div class="panel panel-primary" style="margin:-480px 100px 200px 950px; width:45%">
             <div class="panel-heading">
                 <h3 class="panel-title">pmd缺陷类型top10</h3>
             </div>
@@ -121,8 +124,11 @@
                     plotBorderWidth: null,
                     plotShadow: false
                 };
-                var title = {
-                    text: '任务检测结果统计'
+                var titleF = {
+                    text: 'Findbugs检测结果统计'
+                };
+                var titleP = {
+                    text: 'PMD检测结果统计'
                 };
                 var tooltip = {
                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -143,7 +149,7 @@
 
                 var jsonF = {};
                 jsonF.chart = chart;
-                jsonF.title = title;
+                jsonF.title = titleF;
                 jsonF.tooltip = tooltip;
                 jsonF.series = seriesdF;
                 jsonF.plotOptions = plotOptions;
@@ -151,7 +157,7 @@
 
                 var jsonP = {};
                 jsonP.chart = chart;
-                jsonP.title = title;
+                jsonP.title = titleP;
                 jsonP.tooltip = tooltip;
                 jsonP.series = seriesdP;
                 jsonP.plotOptions = plotOptions;

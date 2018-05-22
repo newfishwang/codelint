@@ -44,6 +44,9 @@
         <li><a href="/compare/list">对比任务</a></li>
         <li><a href="/tool/direct">工具对比</a></li>
     </ul>
+    <form th:action="@{/logout}" method="post" style="margin: -40px 10px 10px 1800px">
+        <input type="submit" value="注销"/>
+    </form>
 </div>
 
 <div class="panel panel-info" style="margin-left: 10px">
@@ -56,11 +59,13 @@
         <tr th:each="task:${tasks}">
             <td th:text="${task.taskName}" style="color: dodgerblue"></td>
             <td th:text="${task.launchTime}"></td>
-            <td style="color: yellowgreen"><span th:if="${task.checkStatus eq 2}">检测成功</span></td>
+            <td><span style="color: yellowgreen" th:if="${task.checkStatus eq 2}">检测成功</span>
+                <span style="color: chocolate" th:if="${task.checkStatus eq 1}">检测中</span>
+                <span style="color: red" th:if="${task.checkStatus eq 4}">检测失败</span></td>
             <td>
                 <a th:href="@{/tasks/direct(taskId=${task.taskId})}">检测统计</a>
-                <a th:href="@{/report/download(taskId=${task.taskId},taskType=1,tool=0)}">查看报告</a>
-                <a th:href="@{/tasks/detail(taskId=${task.taskId})}">删除</a>
+                <a th:href="@{/report/download(taskId=${task.taskId},taskType=1,tool=0)}">下载报告</a>
+                <a th:href="@{/tasks/delete(taskId=${task.taskId})}">删除</a>
             </td>
         </tr>
     </table>

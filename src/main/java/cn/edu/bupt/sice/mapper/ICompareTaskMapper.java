@@ -18,4 +18,5 @@ public interface ICompareTaskMapper {
     int getAllCompareNum();
     CompareTaskVO queryCompareTask(long taskId);
     List<CompareDetailPO> getTop(int tool);
+    void deleteCompare(long taskId);
 }

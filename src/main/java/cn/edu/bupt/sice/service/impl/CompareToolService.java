@@ -69,7 +69,7 @@ public class CompareToolService implements ICompareToolService {
             ruleVO.setNum(entry.getValue().stream().mapToInt(CompareDetailPO::getNum).sum());
             ruleVOList.add(ruleVO);
         }
-        Collections.sort(ruleVOList);
+        Collections.sort(ruleVOList,Collections.reverseOrder());
         ruleVOList = ruleVOList.stream().limit(10).collect(Collectors.toList());
         return ruleVOList;
     }

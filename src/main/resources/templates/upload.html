@@ -17,6 +17,9 @@
         <li><a href="/compare/list">对比任务</a></li>
         <li><a href="/tool/direct">工具对比</a></li>
     </ul>
+    <form th:action="@{/logout}" method="post" style="margin: -40px 10px 10px 1800px">
+        <input type="submit" value="注销"/>
+    </form>
 </div>
 <div class="panel panel-default">
     <div class="panel-body">
@@ -27,9 +30,9 @@
             <input type="text" name="name">
             <br/><br/><br/>
             <p>检测工具</p>
-            <input type="radio" name="tool" value="male" checked>findbugs
+            <input type="radio" name="tool" value="1" checked>findbugs
             <br><br/>
-            <input type="radio" name="tool" value="female">pmd
+            <input type="radio" name="tool" value="2">pmd
             <br/><br/><br/><br/>
             <input type="submit" value="发起检测"/>
 

@@ -18,6 +18,9 @@
         <li><a href="/compare/list">对比任务</a></li>
         <li><a href="/tool/direct">工具对比</a></li>
     </ul>
+    <form th:action="@{/logout}" method="post" style="margin: -40px 10px 10px 1800px">
+        <input type="submit" value="注销"/>
+    </form>
 </div>
 <div th:text="${taskId}" id="haha" hidden="hidden"></div>
 <div class="panel panel-primary">

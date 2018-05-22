@@ -58,7 +58,8 @@
         where sta.task_type=2 and sta.tool=#{_paremeter}
     </select>
     <select id="queryLastTasks" resultMap="compareTaskMap">
-        select * from compare_task order by launch_time desc limit 4
+        select * from compare_task where check_status = 2
+        order by launch_time desc limit 4
     </select>
     <select id="queryAllTasks" resultMap="compareTaskMap">
         select * from compare_task order by launch_time desc
@@ -69,4 +70,7 @@
     <select id="queryCompareTask" resultMap="compareTaskMap" parameterType="long">
         select * from compare_task where task_id=#{_parameter}
     </select>
+    <delete id="deleteCompare" parameterType="long">
+        delete from compare_task where task_id=#{_parameter}
+    </delete>
 </mapper>

@@ -14,7 +14,9 @@ public class FileUtil {
         out.flush();
         out.close();
     }
-    public static void downloadFile(String outputFile,HttpServletResponse response) throws IOException {
+    public static void downloadFile(String outputFile,HttpServletResponse response,String reportName) throws IOException {
+        response.setContentType("application/force-download");// 设置强制下载不打开
+        response.addHeader("Content-Disposition", "attachment;fileName=" + reportName);// 设置文件名
         try {
             BufferedInputStream bis = new BufferedInputStream(new FileInputStream(outputFile));
             BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());

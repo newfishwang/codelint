@@ -44,6 +44,9 @@
         <li class="active"><a href="/compare/list">对比任务</a></li>
         <li><a href="/tool/direct">工具对比</a></li>
     </ul>
+    <form th:action="@{/logout}" method="post" style="margin: -40px 10px 10px 1800px">
+        <input type="submit" value="注销"/>
+    </form>
 </div>
 <div class="panel panel-info" style="margin-left: 10px">
     <div class="panel-heading">任务列表<button class="btn btn-default" type="submit" style="margin-left: 1200px"><a href="/compare/upload">发起检测</a></button></div>
@@ -55,12 +58,14 @@
         <tr th:each="task:${compare}">
             <td th:text="${task.taskName}" style="color: dodgerblue"></td>
             <td th:text="${task.launchTime}"></td>
-            <td style="color: yellowgreen"><span th:if="${task.checkStatus eq 2}">检测成功</span></td>
+            <td><span style="color: yellowgreen" th:if="${task.checkStatus eq 2}">检测成功</span>
+                <span style="color: chocolate" th:if="${task.checkStatus eq 1}">检测中</span>
+                <span style="color: red" th:if="${task.checkStatus eq 4}">检测失败</span></td>
             <td>
                 <a th:href="@{/compare/direct(taskId=${task.taskId})}">检测统计</a><b>|</b>
-                <a th:href="@{/report/download(taskId=${task.taskId},taskType=2,tool=1)}">查看findbugs报告</a><b>|</b>
-                <a th:href="@{/report/download(taskId=${task.taskId},taskType=2,tool=2)}">查看pmd报告</a><b>|</b>
-                <a th:href="@{/compare/detail(taskId=${task.taskId})}">删除</a>
+                <a th:href="@{/report/download(taskId=${task.taskId},taskType=2,tool=1)}">下载findbugs报告</a><b>|</b>
+                <a th:href="@{/report/download(taskId=${task.taskId},taskType=2,tool=2)}">下载pmd报告</a><b>|</b>
+                <a th:href="@{/compare/delete(taskId=${task.taskId})}">删除</a>
             </td>
         </tr>
     </table>

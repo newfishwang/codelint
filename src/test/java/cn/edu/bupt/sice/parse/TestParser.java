@@ -12,7 +12,7 @@ public class TestParser {
         Map<String,TableVO> map = null;
         HtmlVO htmlVO = null;
         try {
-            htmlVO = HtmlParser.parseHtml("haha.html");
+            htmlVO = HtmlParser.parsePMDResult("6a4294c2-e7ad-4b53-b2ea-65aece0f0f29.html");
             map = htmlVO.getTableVOMap();
             CodeVO codeVO = htmlVO.getCodeVO();
             map.get("high");

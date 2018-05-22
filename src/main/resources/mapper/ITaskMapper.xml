@@ -41,7 +41,8 @@
         order by task.task_id
     </select>
     <select id="queryLastTasks" resultMap="TaskMap">
-        select * from chk_task order by launch_time desc limit 4
+        select * from chk_task where check_status = 2
+        order by launch_time desc limit 4
     </select>
     <select id="getAllTaskNum" resultType="int">
         select count(*) from chk_task
@@ -50,6 +51,9 @@
         select * from chk_task where task_id=#{_parameter};
     </select>
     <select id="queryAllTasks" resultMap="TaskMap">
-        select * from chk_task;
+        select * from chk_task order by launch_time desc;
     </select>
+    <delete id="deleteTask" parameterType="long">
+        delete from chk_task where task_id=#{_parameter};
+    </delete>
 </mapper>

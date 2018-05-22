@@ -3,6 +3,7 @@ package cn.edu.bupt.sice.web;
 
 import cn.edu.bupt.sice.service.ITaskService;
 import cn.edu.bupt.sice.vo.TaskDetailVO;
+import cn.edu.bupt.sice.vo.TaskListVO;
 import cn.edu.bupt.sice.vo.TaskVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.config.Task;
@@ -28,9 +29,9 @@ public class TaskController {
     }
     @PostMapping("/handleUpload")
     public String handleFile(@RequestParam("file") MultipartFile file,@RequestParam("name") String name,@RequestParam("tool") String tool,Model model) {
-        List<TaskVO> taskVOs;
+        List<TaskListVO> taskVOs;
         try {
-            taskService.handleUpload(file);
+            taskService.handleUpload(file,name,Integer.valueOf(tool));
             taskVOs = taskService.getTaskList();
             model.addAttribute("tasks",taskVOs);
         } catch (Exception e) {
@@ -41,7 +42,7 @@ public class TaskController {
     }
     @GetMapping("/list")
     public String getTaskList(Model model) {
-        List<TaskVO> taskVOs;
+        List<TaskListVO> taskVOs;
         try  {
            taskVOs = taskService.getTaskList();
            model.addAttribute("tasks",taskVOs);
@@ -72,5 +73,17 @@ public class TaskController {
             e.printStackTrace();
         }
         return "taskDetail";
+    }
+    @RequestMapping("/delete")
+    public String delete(@RequestParam("taskId") long taskId,Model model) {
+        List<TaskListVO> taskVOs;
+        try {
+            taskService.deleteTask(taskId);
+            taskVOs = taskService.getTaskList();
+            model.addAttribute("tasks",taskVOs);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "task";
     }
 }

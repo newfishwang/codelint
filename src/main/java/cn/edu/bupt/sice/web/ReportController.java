@@ -26,17 +26,21 @@ public class ReportController {
     @RequestMapping("/download")
     public String downloadReport(HttpServletResponse response, @RequestParam("taskId") long taskId,@RequestParam("taskType") int taskType,@RequestParam("tool") int tool) {
         String reportPath = null;
+        String reportName = "";
         try {
             if (taskType == TaskType.CHECK_TASK.getCode()) {
                 reportPath = taskService.queryTask(taskId).getResultPath();
+                reportName = taskService.queryTask(taskId).getTaskName();
             } else {
                 if (tool == CheckTool.FINDBUGS.getToolCode()) {
                     reportPath = compareTaskService.queryCompareTask(taskId).getResultPathFindBugs();
+                    reportName = compareTaskService.queryCompareTask(taskId).getTaskName() + "-findbugs.html";
                 } else {
                     reportPath = compareTaskService.queryCompareTask(taskId).getResultPathPMD();
+                    reportName = compareTaskService.queryCompareTask(taskId).getTaskName() + "-pmd.html";
                 }
             }
-            reportService.download(response,reportPath);
+            reportService.download(response,reportPath,reportName);
         } catch (Exception e) {
             e.printStackTrace();
         }

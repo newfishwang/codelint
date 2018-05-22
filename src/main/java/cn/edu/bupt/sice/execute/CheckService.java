@@ -69,6 +69,39 @@ public class CheckService {
                 }
                 e.printStackTrace();
             }
+        } else {
+            String checkLine = "cmd$/c$\"E:/open/pmd-bin-6.2.0/bin/pmd.bat -dir D:/projectsForGraduation/zip/" +taskVO.getZipPath() + ".zip"+
+                    " -f summaryhtml -r E:/open/results/" + resultPath+ ".html -rulesets E:/open/pmd-bin-6.2.0/myrule.xml -encoding UTF-8\"";
+            try {
+                ProcessBuilder processBuilder = new ProcessBuilder(checkLine.split("\\$"));
+                Process process = processBuilder.start();
+                BufferedReader bufferedReader = new BufferedReader
+                        (new InputStreamReader(process.getInputStream()));
+                while ((line = bufferedReader.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+                log.info(sb.toString());
+                HtmlVO htmlVO = HtmlParser.parsePMDResult(resultPath+".html");
+                StatisticsVO statisticsVO = getStatisticsFromParser(htmlVO);
+                statisticsVO.setStatisticsTaskId(taskVO.getTaskId());
+                statisticsVO.setTaskType(TaskType.CHECK_TASK.getCode());
+                statisticsVO.setTool(4);
+                statisticsService.insertStatistics(statisticsVO);
+                List<StatisticsExVO> statisticsExVOList = getStatisticsExVO(htmlVO,statisticsVO.getStatisticsId());
+                statisticsService.insertIntoEx(statisticsExVOList);
+                taskVO.setCheckStatus(2);
+                taskVO.setResultPath(resultPath);
+                taskMapper.updateTask(taskVO);
+
+            } catch (Exception e) {
+                taskVO.setCheckStatus(4);
+                try {
+                    taskMapper.updateTask(taskVO);
+                } catch (Exception ie) {
+                    log.error("update task failed");
+                }
+                e.printStackTrace();
+            }
         }
         return resultPath;
     }
@@ -132,7 +165,7 @@ public class CheckService {
             ProcessBuilder processBuilderP = new ProcessBuilder(checkLineP.split("\\$"));
             Process processF = processBuilderF.start();
             Process processP = processBuilderP.start();
-            BufferedReader bufferedReaderF = new BufferedReader
+            /*BufferedReader bufferedReaderF = new BufferedReader
                     (new InputStreamReader(processF.getInputStream()));
             while ((line = bufferedReaderF.readLine()) != null) {
                 sbF.append(line + "\n");
@@ -143,13 +176,14 @@ public class CheckService {
             while ((line = bufferedReaderP.readLine()) != null) {
                 sbP.append(line + "\n");
             }
-            log.info(sbP.toString());
+            log.info(sbP.toString());*/
+            Thread.sleep(120000);
             compareTaskVO.setResultPathPMD(resultPathP);
             compareTaskVO.setResultPathFindBugs(resultPathF);
             compareTaskVO.setCheckStatus(2);
             compareTaskMapper.updateTask(compareTaskVO);
             //pmd
-            HtmlVO htmlVOP = HtmlParser.parsePMDResult(resultPathP+".html");
+            HtmlVO htmlVOP = HtmlParser.parsePMDResult(compareTaskVO.getResultPathPMD()+".html");
             StatisticsVO statisticsVOP = getStatisticsFromParser(htmlVOP);
             statisticsVOP.setStatisticsTaskId(compareTaskVO.getTaskId());
             statisticsVOP.setTaskType(TaskType.COMPARE_TASK.getCode());

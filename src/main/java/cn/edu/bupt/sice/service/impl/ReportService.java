@@ -14,7 +14,7 @@ import java.nio.file.Files;
 public class ReportService implements IReportService {
     private static final String prefix = "E:/open/results/";
     @Override
-    public void download(HttpServletResponse response, String fileName) throws Exception {
+    public void download(HttpServletResponse response, String fileName,String reportName) throws Exception {
         File file = new File(prefix);
         if (!file.exists()) {
             boolean ismake = file.mkdirs();
@@ -27,6 +27,6 @@ public class ReportService implements IReportService {
         /*if (!Files.isSameFile(reportFile.getParentFile().toPath(), reportFile.toPath())) {
             throw new IOException("报告路径异常");
         }*/
-        FileUtil.downloadFile(filePath,response);
+        FileUtil.downloadFile(filePath,response,reportName);
     }
 }
