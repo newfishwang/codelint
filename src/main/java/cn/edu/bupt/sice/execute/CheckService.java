@@ -45,13 +45,14 @@ public class CheckService {
             try {
                 ProcessBuilder processBuilder = new ProcessBuilder(checkLine.split("\\$"));
                 Process process = processBuilder.start();
-                BufferedReader bufferedReader = new BufferedReader
+                /*BufferedReader bufferedReader = new BufferedReader
                         (new InputStreamReader(process.getInputStream()));
                 while ((line = bufferedReader.readLine()) != null) {
                     sb.append(line + "\n");
-                }
-                log.info(sb.toString());
+                }*/
+                Thread.sleep(180000);
                 HtmlVO htmlVO = HtmlParser.parseHtml(resultPath+".html");
+                log.info("---------check task succeeded---------");
                 StatisticsVO statisticsVO = getStatisticsFromParser(htmlVO);
                 statisticsVO.setStatisticsTaskId(taskVO.getTaskId());
                 statisticsVO.setTaskType(TaskType.CHECK_TASK.getCode());
@@ -78,13 +79,14 @@ public class CheckService {
             try {
                 ProcessBuilder processBuilder = new ProcessBuilder(checkLine.split("\\$"));
                 Process process = processBuilder.start();
-                BufferedReader bufferedReader = new BufferedReader
+                /*BufferedReader bufferedReader = new BufferedReader
                         (new InputStreamReader(process.getInputStream()));
                 while ((line = bufferedReader.readLine()) != null) {
                     sb.append(line + "\n");
-                }
-                log.info(sb.toString());
+                }*/
+                Thread.sleep(180000);
                 HtmlVO htmlVO = HtmlParser.parsePMDResult(resultPath+".html");
+                log.info("---------check task succeeded---------");
                 StatisticsVO statisticsVO = getStatisticsFromParser(htmlVO);
                 statisticsVO.setStatisticsTaskId(taskVO.getTaskId());
                 statisticsVO.setTaskType(TaskType.CHECK_TASK.getCode());
@@ -180,7 +182,7 @@ public class CheckService {
                 sbP.append(line + "\n");
             }
             log.info(sbP.toString());*/
-            Thread.sleep(120000);
+            Thread.sleep(180000);
             compareTaskVO.setResultPathPMD(resultPathP);
             compareTaskVO.setResultPathFindBugs(resultPathF);
             compareTaskVO.setCheckStatus(2);

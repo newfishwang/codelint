@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 public class HtmlParser {
-    private static final String resultDir = "E:/open/results";
+    private static final String resultDir = "E:/codelint/results";
     public static HtmlVO parseHtml(String htmlPath) throws IOException {
         Map<String,TableVO> statisticsMap = new HashMap<>();
         File file = new File(resultDir + "/" + htmlPath);

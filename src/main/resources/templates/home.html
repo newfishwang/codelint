@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>codelint</title>
@@ -63,7 +63,9 @@
                 </div>
                 <div class="panel-body">
                     <ul class="list-group">
-                        <li class="list-group-item">检测工具：<b th:text="${brief.taskBriefVOList[0].tool==1}?'findbugs':(${brief.taskBriefVOList[0].tool==2}?:'pmd')"></b></li>
+                        <li class="list-group-item">检测工具：<span th:if="${brief.taskBriefVOList[0].tool eq 1}">findbugs</span>
+                                <span th:if="${brief.taskBriefVOList[0].tool eq 2}">PMD</span>
+                        </li>
                         <li class="list-group-item">高等级缺陷：<b th:text="${brief.taskBriefVOList[0].highNum}"></b></li>
                         <li class="list-group-item">中等级缺陷：<b th:text="${brief.taskBriefVOList[0].midNum}"></b></li>
                         <li class="list-group-item">低等级缺陷：<b th:text="${brief.taskBriefVOList[0].lowNum}"></b></li>
@@ -76,7 +78,9 @@
                 </div>
                 <div class="panel-body">
                     <ul class="list-group">
-                        <li class="list-group-item">检测工具：<b th:text="${brief.taskBriefVOList[1].tool==1}?'findbugs':(${brief.taskBriefVOList[1].tool==2}?:'pmd')"></b></li>
+                        <li class="list-group-item">检测工具：<span th:if="${brief.taskBriefVOList[1].tool eq 1}">findbugs</span>
+                            <span th:if="${brief.taskBriefVOList[1].tool eq 2}">PMD</span>
+                        </li>
                         <li class="list-group-item">高等级缺陷：<b th:text="${brief.taskBriefVOList[1].highNum}"></b></li>
                         <li class="list-group-item">中等级缺陷：<b th:text="${brief.taskBriefVOList[1].midNum}"></b></li>
                         <li class="list-group-item">低等级缺陷：<b th:text="${brief.taskBriefVOList[1].lowNum}"></b></li>
@@ -89,7 +93,9 @@
                 </div>
                 <div class="panel-body">
                     <ul class="list-group">
-                        <li class="list-group-item">检测工具：<b th:text="${brief.taskBriefVOList[2].tool==1}?'findbugs':(${brief.taskBriefVOList[2].tool==2}?:'pmd')"></b></li>
+                        <li class="list-group-item">检测工具：<span th:if="${brief.taskBriefVOList[2].tool eq 1}">findbugs</span>
+                            <span th:if="${brief.taskBriefVOList[2].tool eq 2}">PMD</span>
+                        </li>
                         <li class="list-group-item">高等级缺陷：<b th:text="${brief.taskBriefVOList[2].highNum}"></b></li>
                         <li class="list-group-item">中等级缺陷：<b th:text="${brief.taskBriefVOList[2].midNum}"></b></li>
                         <li class="list-group-item">低等级缺陷：<b th:text="${brief.taskBriefVOList[2].lowNum}"></b></li>
@@ -102,7 +108,9 @@
                 </div>
                 <div class="panel-body">
                     <ul class="list-group">
-                        <li class="list-group-item">检测工具：<b th:text="${brief.taskBriefVOList[3].tool==1}?'findbugs':(${brief.taskBriefVOList[3].tool==2}?:'pmd')"></b></li>
+                        <li class="list-group-item">检测工具：<span th:if="${brief.taskBriefVOList[3].tool eq 1}">findbugs</span>
+                            <span th:if="${brief.taskBriefVOList[3].tool eq 2}">PMD</span>
+                        </li>
                         <li class="list-group-item">高等级缺陷：<b th:text="${brief.taskBriefVOList[3].highNum}"></b></li>
                         <li class="list-group-item">中等级缺陷：<b th:text="${brief.taskBriefVOList[3].midNum}"></b></li>
                         <li class="list-group-item">低等级缺陷：<b th:text="${brief.taskBriefVOList[3].lowNum}"></b></li>
